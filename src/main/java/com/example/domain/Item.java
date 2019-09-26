@@ -18,7 +18,7 @@ public class Item {
 	/** 説明 */
 	private String description;
 	/** カテゴリの名前 */
-	private String categoryName;
+	private String nameAll;
 	
 	public Integer getId() {
 		return id;
@@ -68,19 +68,21 @@ public class Item {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getCategoryName() {
-		return categoryName;
+	public String getNameAll() {
+		return nameAll;
 	}
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
+	public void setNameAll(String nameAll) {
+		this.nameAll = nameAll;
 	}
 	
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", name=" + name + ", condition=" + condition + ", category=" + category + ", brand="
-				+ brand + ", price=" + price + ", shipping=" + shipping + ", description=" + description
-				+ ", categoryName=" + categoryName + "]";
+				+ brand + ", price=" + price + ", shipping=" + shipping + ", description=" + description + ", nameAll="
+				+ nameAll + "]";
 	}
+	
+
 
 
 	

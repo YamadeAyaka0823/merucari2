@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.domain.Category;
 import com.example.domain.Item;
 import com.example.repository.ItemRepository;
 
@@ -20,9 +21,18 @@ public class ItemService {
 	 * 商品全件検索のサービス.
 	 * @return
 	 */
-	public List<Item> findAll(){
-		List<Item> itemList = itemRepository.findAll();
+	public List<Item> findAll(Integer pageNumber){
+		List<Item> itemList = itemRepository.findAll(pageNumber);
 		return itemList;
+	}
+	
+	/**
+	 * 大カテゴリを検索するリポジトリ.
+	 * @return
+	 */
+	public List<Category> searchParent(){
+		List<Category> parentList = itemRepository.searchParent();
+		return parentList;
 	}
 
 }

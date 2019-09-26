@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.domain.Category;
 import com.example.domain.Item;
 import com.example.service.ItemService;
 
@@ -23,9 +24,17 @@ public class ItemController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public String list(Model model) {
-		List<Item> itemList = itemService.findAll();
+	public String list(Integer pageNumber,Model model) {
+		if(pageNumber == null) {
+			pageNumber = 1;
+		}
+		
+		List<Item> itemList = itemService.findAll(pageNumber);
 		model.addAttribute("itemList", itemList);
+		model.addAttribute("pageNumber", pageNumber);
+		
+		List<Category> parentList = itemService.searchParent();
+		model.addAttribute("parentList", parentList);
 		return "list";
 	}
 

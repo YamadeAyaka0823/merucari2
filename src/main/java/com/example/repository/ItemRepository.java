@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.example.domain.Category;
 import com.example.domain.Item;
 
 @Repository
@@ -25,8 +26,17 @@ public class ItemRepository {
 		item.setCategory(rs.getInt("i_category"));
 		item.setCondition(rs.getInt("i_condition"));
 		item.setDescription(rs.getString("i_description"));
-		item.setCategoryName(rs.getNString("c_name"));
+		item.setNameAll(rs.getString("c_name_all"));
 		return item;
+	};
+	
+	private static final RowMapper<Category> CATEGORY_ROW_MAPPER = (rs,i) -> {
+		Category category = new Category();
+//		category.setId(rs.getInt("id"));
+//		category.setName(rs.getString("name"));
+		category.setNameAll(rs.getString("split_part"));
+//		category.setParent(rs.getInt("parent"));
+		return category;
 	};
 	
 	
@@ -34,10 +44,21 @@ public class ItemRepository {
 	 * 商品全件検索のリポジトリ.
 	 * @return
 	 */
-	public List<Item> findAll(){
-		String sql = "SELECT i_id i.id, i_name i.name, i_price i.price, i_shipping i.shipping, i_brand i.brand, i_category i.category, i_condition i.condition, i_description i.description, c_name c.name FROM items i INNER JOIN category c ON i.name = c.name  ORDER BY i.id LIMIT 30 ";
+	public List<Item> findAll(Integer pageNumber){
+		int offset = (pageNumber - 1) * 30;
+		String sql = "SELECT i.id i_id, i.name i_name, i.price i_price, i.shipping i_shipping, i.brand i_brand, i.category i_category, i.condition i_condition, i.description i_description, c.name_all c_name_all FROM items i LEFT OUTER JOIN category c ON i.category = c.id  ORDER BY i.id LIMIT 30 OFFSET " + offset;
 		List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 		return itemList;
+	}
+	
+	/**
+	 * 大カテゴリを検索するリポジトリ.
+	 * @return
+	 */
+	public List<Category> searchParent(){
+		String sql = "SELECT DISTINCT SPLIT_PART(name_all, '/', 1) FROM category WHERE name_all IS NOT NULL";
+		List<Category> parentList = template.query(sql, CATEGORY_ROW_MAPPER);
+		return parentList;
 	}
 
 }

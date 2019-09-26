@@ -55,14 +55,11 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
         </div>
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
+          
           <select class="form-control">
-            <option>- parentCategory -</option>
-            <option>parentCategory1</option>
-            <option>parentCategory2</option>
-            <option>parentCategory3</option>
-            <option>parentCategory4</option>
-            <option>parentCategory5</option>
+            <option th:each="parent:${parentList}" th:text="${parent.nameAll}"></option>
           </select>
+        
           <select class="form-control">
             <option>- childCategory -</option>
             <option>childCategory1</option>
@@ -91,12 +88,14 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
     <!-- pagination -->
     <div class="pages">
+    <form method="post">
       <nav class="page-nav">
         <ul class="pager">
-          <li class="previous"><a href="#">&larr; prev</a></li>
-          <li class="next"><a href="#">next &rarr;</a></li>
+          <li class="previous"><button type="submit" name="pageNumber" th:value="${pageNumber - 1}">&larr; prev</button></li>
+          <li class="next"><button type="submit" name="pageNumber" th:value="${pageNumber + 1}">next &rarr;</button></li>
         </ul>
       </nav>
+      </form>
     </div>
 
     <!-- table -->
@@ -115,7 +114,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
           <tr th:each="item:${itemList}">
             <td th:text="${item.name}"  class="item-name"><a href="./detail.html">Razer BlackWidow Chroma Keyboard</a></td>
             <td th:text="${item.price}" class="item-price">52.0</td>
-            <td th:text="${item.category}" class="item-category"><a href="">Electronics</a> / <a href="">Computers &amp; Tablets</a> / <a href="">Components &amp; Parts</a></td>
+            <td th:text="${item.nameAll}" class="item-category"><a href="">Electronics</a> / <a href="">Computers &amp; Tablets</a> / <a href="">Components &amp; Parts</a></td>
             <td th:text="${item.brand}" class="item-brand"><a href="">Razer</a></td>
             <td th:text="${item.condition}" class="item-condition">3</td>
           </tr>
@@ -125,24 +124,26 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
     <!-- pagination -->
     <div class="pages">
+    <form method="post">
       <nav class="page-nav">
         <ul class="pager">
-          <li class="previous"><a href="#">&larr; prev</a></li>
-          <li class="next"><a href="#">next &rarr;</a></li>
+          <li class="previous"><button type="submit" name="pageNumber" th:value="${pageNumber - 1}">&larr; prev</button></li>
+          <li class="next"><button type="submit" name="pageNumber" th:value="${pageNumber + 1}">next &rarr;</button></li>
         </ul>
       </nav>
+      </form>
       <!-- ページ番号を指定して表示するフォーム -->
       <div id="select-page">
-        <form class="form-inline">
+        <form class="form-inline" method="post">
           <div class="form-group">
             <div class="input-group col-xs-6">
               <label></label>
-              <input type="text" class="form-control"/>
+              <input type="text" name="pageNumber" class="form-control"/>
               <!-- 総ページ数 -->
               <div class="input-group-addon">/ 20</div>
             </div>
             <div class="input-group col-xs-1">
-              <button type="submit" class="btn btn-default">Go</button>
+              <button type="submit" name="pageNumber" th:value="${pageNumber}" class="btn btn-default">Go</button>
             </div>
           </div>
         </form>

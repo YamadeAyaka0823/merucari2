@@ -9,7 +9,7 @@ public class Category {
 	/** 名前 */
 	private String name;
 	/** 商品名階層 */
-	private String name_all;
+	private String nameAll;
 	
 	public Integer getId() {
 		return id;
@@ -29,17 +29,19 @@ public class Category {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getName_all() {
-		return name_all;
+	public String getNameAll() {
+		return nameAll;
 	}
-	public void setName_all(String name_all) {
-		this.name_all = name_all;
+	public void setNameAll(String nameAll) {
+		this.nameAll = nameAll;
 	}
 	
 	@Override
 	public String toString() {
-		return "Category [id=" + id + ", parent=" + parent + ", name=" + name + ", name_all=" + name_all + "]";
+		return "Category [id=" + id + ", parent=" + parent + ", name=" + name + ", nameAll=" + nameAll + "]";
 	}
+	
+
 	
 	
 	
