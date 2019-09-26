@@ -27,6 +27,16 @@ public class ItemService {
 	}
 	
 	/**
+	 * 商品詳細を1件検索するサービス.
+	 * @param id
+	 * @return
+	 */
+	public Item load(Integer id) {
+		Item item = itemRepository.load(id);
+		return item;
+	}
+	
+	/**
 	 * 大カテゴリを検索するサービス.
 	 * @return
 	 */

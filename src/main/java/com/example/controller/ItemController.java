@@ -43,5 +43,18 @@ public class ItemController {
 		model.addAttribute("grandChildList", grandChildList);
 		return "list";
 	}
+	
+	/**
+	 * 商品詳細.
+	 * @param id
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/detail")
+	public String detail(Integer id, Model model) {
+		Item item = itemService.load(id);
+		model.addAttribute("item", item);
+		return "detail";
+	}
 
 }
