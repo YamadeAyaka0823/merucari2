@@ -27,12 +27,30 @@ public class ItemService {
 	}
 	
 	/**
-	 * 大カテゴリを検索するリポジトリ.
+	 * 大カテゴリを検索するサービス.
 	 * @return
 	 */
 	public List<Category> searchParent(){
 		List<Category> parentList = itemRepository.searchParent();
 		return parentList;
+	}
+	
+	/**
+	 * 中カテゴリを検索するサービス.
+	 * @return
+	 */
+	public List<Category> searchChild(){
+		List<Category> childList = itemRepository.searchChild();
+		return childList;
+	}
+	
+	/**
+	 * 小カテゴリを検索するサービス.
+	 * @return
+	 */
+	public List<Category> searchGrandChild(){
+		List<Category> grandChildList = itemRepository.searchGrandChild();
+		return grandChildList;
 	}
 
 }

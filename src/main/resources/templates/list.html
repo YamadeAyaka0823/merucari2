@@ -57,24 +57,17 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
         <div class="form-group">
           
           <select class="form-control">
+            <option>- parentCategory -</option>
             <option th:each="parent:${parentList}" th:text="${parent.nameAll}"></option>
           </select>
         
           <select class="form-control">
             <option>- childCategory -</option>
-            <option>childCategory1</option>
-            <option>childCategory2</option>
-            <option>childCategory3</option>
-            <option>childCategory4</option>
-            <option>childCategory5</option>
+            <option th:each="child:${childList}" th:text="${child.nameAll}"></option>
           </select>
           <select class="form-control">
             <option>- grandChild -</option>
-            <option>grandChild1</option>
-            <option>grandChild2</option>
-            <option>grandChild3</option>
-            <option>grandChild4</option>
-            <option>grandChild5</option>
+            <option th:each="grandChild:${grandChildList}" th:text="${grandChild.nameAll}"></option>
           </select>
         </div>
         <div class="form-group"><i class="fa fa-plus"></i></div>

@@ -60,5 +60,25 @@ public class ItemRepository {
 		List<Category> parentList = template.query(sql, CATEGORY_ROW_MAPPER);
 		return parentList;
 	}
+	
+	/**
+	 * 中カテゴリを検索するリポジトリ.
+	 * @return
+	 */
+	public List<Category> searchChild(){
+		String sql = "SELECT DISTINCT SPLIT_PART(name_all, '/', 2) FROM category WHERE name_all IS NOT NULL";
+		List<Category> parentList = template.query(sql, CATEGORY_ROW_MAPPER);
+		return parentList;
+	}
+	
+	/**
+	 * 小カテゴリを検索するリポジトリ.
+	 * @return
+	 */
+	public List<Category> searchGrandChild(){
+		String sql = "SELECT DISTINCT SPLIT_PART(name_all, '/', 3) FROM category WHERE name_all IS NOT NULL";
+		List<Category> parentList = template.query(sql, CATEGORY_ROW_MAPPER);
+		return parentList;
+	}
 
 }

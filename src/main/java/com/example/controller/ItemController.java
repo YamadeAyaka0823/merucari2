@@ -35,6 +35,12 @@ public class ItemController {
 		
 		List<Category> parentList = itemService.searchParent();
 		model.addAttribute("parentList", parentList);
+		
+		List<Category> childList = itemService.searchChild();
+		model.addAttribute("childList", childList);
+		
+		List<Category> grandChildList = itemService.searchGrandChild();
+		model.addAttribute("grandChildList", grandChildList);
 		return "list";
 	}
 
