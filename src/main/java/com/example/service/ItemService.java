@@ -47,6 +47,17 @@ public class ItemService {
 	}
 	
 	/**
+	 * ブランドごとに検索するサービス.
+	 * @param brand
+	 * @param pageNumber
+	 * @return
+	 */
+	public List<Item> findBrand(String brand, Integer pageNumber){
+		List<Item> itemBrandList = itemRepository.findBrand(brand, pageNumber);
+		return itemBrandList;
+	}
+	
+	/**
 	 * 大カテゴリを検索するサービス.
 	 * @return
 	 */

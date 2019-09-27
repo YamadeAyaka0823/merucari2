@@ -64,14 +64,53 @@ public class ItemController {
 	 * @return
 	 */
 	@RequestMapping("/findName")
-	public String findName(Integer pageNumber, String nameAll, Model model) {
+	public String findName(Integer pageNumber, String nameAll, String brand, Model model) {
 		if(pageNumber == null) {
 			pageNumber = 1;
 		}
 		model.addAttribute("pageNumber", pageNumber);
 		List<Item> itemNameList = itemService.findName(nameAll, pageNumber);
 		model.addAttribute("itemList", itemNameList);
+		List<Item> itemBrandList = itemService.findBrand(brand, pageNumber);
+		model.addAttribute("itemList", itemBrandList);
 		return "list";
+	}
+	
+	/**
+	 * 大カテゴリ→中カテゴリのプルダウン.
+	 * @param nameAllChild
+	 * @return
+	 */
+	@RequestMapping("/pulldown")
+	public String changePulldown(String nameAllChild) {
+		List<Category> childList = itemService.searchChild();
+		Integer val = Integer.parseInt(nameAllChild);
+		StringBuilder child = new StringBuilder();
+		String str = "";
+		child.append("[");
+		
+		for(int i=0; i<childList.size(); i++) {
+		   child.append("{\"");
+		   child.append("value");
+		   child.append("\"");
+		   child.append(":");
+		   child.append("pulldown2_key");
+		   child.append(",");
+		   child.append("\"");
+		   child.append("th:text");
+		   child.append("\"");
+		   child.append(":");
+		   child.append("\"}");
+		   child.append("${child.nameAll}");
+		   child.append("\"}");
+		   child.append(",");
+		}
+		
+		child.deleteCharAt(child.lastIndexOf(","));
+		child.append("]");
+		str = child.toString();
+		
+		return str;
 	}
 
 }

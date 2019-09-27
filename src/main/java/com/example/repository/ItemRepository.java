@@ -81,6 +81,20 @@ public class ItemRepository {
 	}
 	
 	/**
+	 * ブランドごとに検索するリポジトリ.
+	 * @param brand
+	 * @param pageNumber
+	 * @return
+	 */
+	public List<Item> findBrand(String brand, Integer pageNumber){
+		int offset = (pageNumber - 1) * 30;
+		String sql = "SELECT i.id i_id, i.name i_name, i.price i_price, i.shipping i_shipping, i.brand i_brand, i.category i_category, i.condition i_condition, i.description i_description, SPLIT_PART(c.name_all, '/', 1) AS parent ,SPLIT_PART(c.name_all, '/', 2) AS child , SPLIT_PART(c.name_all, '/', 3) AS grandchild FROM items i LEFT OUTER JOIN category c ON i.category = c.id WHERE i.brand LIKE :brand ORDER BY i.id LIMIT 30 OFFSET " + offset;
+		SqlParameterSource param = new MapSqlParameterSource().addValue("brand", brand + '%');
+		List<Item> itemBrandList = template.query(sql, param, ITEM_ROW_MAPPER);
+		return itemBrandList;
+	}
+	
+	/**
 	 * 大カテゴリを検索するリポジトリ.
 	 * @return
 	 */
