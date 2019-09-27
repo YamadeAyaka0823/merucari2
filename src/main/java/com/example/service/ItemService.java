@@ -37,6 +37,16 @@ public class ItemService {
 	}
 	
 	/**
+	 * 商品をカテゴリごとに検索するサービス.
+	 * @param nameAll
+	 * @return
+	 */
+	public List<Item> findName(String nameAll, Integer pageNumber){
+		List<Item> itemNameList = itemRepository.findName(nameAll, pageNumber);
+		return itemNameList;
+	}
+	
+	/**
 	 * 大カテゴリを検索するサービス.
 	 * @return
 	 */

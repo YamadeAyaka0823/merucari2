@@ -56,5 +56,22 @@ public class ItemController {
 		model.addAttribute("item", item);
 		return "detail";
 	}
+	
+	/**
+	 * 商品をカテゴリごとに検索する.
+	 * @param nameAll
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/findName")
+	public String findName(Integer pageNumber, String nameAll, Model model) {
+		if(pageNumber == null) {
+			pageNumber = 1;
+		}
+		model.addAttribute("pageNumber", pageNumber);
+		List<Item> itemNameList = itemService.findName(nameAll, pageNumber);
+		model.addAttribute("itemList", itemNameList);
+		return "list";
+	}
 
 }

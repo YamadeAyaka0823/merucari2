@@ -28,7 +28,9 @@ public class ItemRepository {
 		item.setCategory(rs.getInt("i_category"));
 		item.setCondition(rs.getInt("i_condition"));
 		item.setDescription(rs.getString("i_description"));
-		item.setNameAll(rs.getString("c_name_all"));
+		item.setNameAllParent(rs.getString("parent"));
+		item.setNameAllChild(rs.getString("child"));
+		item.setNameAllGrandChild(rs.getString("grandchild"));
 		return item;
 	};
 	
@@ -48,7 +50,7 @@ public class ItemRepository {
 	 */
 	public List<Item> findAll(Integer pageNumber){
 		int offset = (pageNumber - 1) * 30;
-		String sql = "SELECT i.id i_id, i.name i_name, i.price i_price, i.shipping i_shipping, i.brand i_brand, i.category i_category, i.condition i_condition, i.description i_description, c.name_all c_name_all FROM items i LEFT OUTER JOIN category c ON i.category = c.id  ORDER BY i.id LIMIT 30 OFFSET " + offset;
+		String sql = "SELECT i.id i_id, i.name i_name, i.price i_price, i.shipping i_shipping, i.brand i_brand, i.category i_category, i.condition i_condition, i.description i_description, SPLIT_PART(c.name_all, '/', 1) AS parent ,SPLIT_PART(c.name_all, '/', 2) AS child , SPLIT_PART(c.name_all, '/', 3) AS grandchild  FROM items i LEFT OUTER JOIN category c ON i.category = c.id  ORDER BY i.id LIMIT 30 OFFSET " + offset;
 		List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 		return itemList;
 	}
@@ -59,10 +61,23 @@ public class ItemRepository {
 	 * @return
 	 */
 	public Item load(Integer id) {
-		String sql = "SELECT id, name, price, shipping, brand, category, condition, description FROM items WHERE id = :id";
+		String sql = "SELECT i.id i_id, i.name i_name, i.price i_price, i.shipping i_shipping, i.brand i_brand, i.category i_category, i.condition i_condition, i.description i_description, SPLIT_PART(c.name_all, '/', 1) AS parent ,SPLIT_PART(c.name_all, '/', 2) AS child , SPLIT_PART(c.name_all, '/', 3) AS grandchild FROM items i LEFT OUTER JOIN category c ON i.category = c.id WHERE i.id = :id";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		Item item = template.queryForObject(sql, param, ITEM_ROW_MAPPER);
 		return item;
+	}
+	
+	/**
+	 * 商品をカテゴリごとに検索するリポジトリ.
+	 * @param nameAll
+	 * @return
+	 */
+	public List<Item> findName(String nameAll, Integer pageNumber){
+		int offset = (pageNumber - 1) * 30;
+		String sql = "SELECT i.id i_id, i.name i_name, i.price i_price, i.shipping i_shipping, i.brand i_brand, i.category i_category, i.condition i_condition, i.description i_description, SPLIT_PART(c.name_all, '/', 1) AS parent ,SPLIT_PART(c.name_all, '/', 2) AS child , SPLIT_PART(c.name_all, '/', 3) AS grandchild FROM items i LEFT OUTER JOIN category c ON i.category = c.id WHERE c.name_all LIKE :nameAll ORDER BY i.id LIMIT 30 OFFSET " + offset;
+		SqlParameterSource param = new MapSqlParameterSource().addValue("nameAll", nameAll + '%');
+		List<Item> itemNameList = template.query(sql, param, ITEM_ROW_MAPPER);
+		return itemNameList;
 	}
 	
 	/**

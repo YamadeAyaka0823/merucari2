@@ -105,9 +105,9 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
         </thead>
         <tbody>
           <tr th:each="item:${itemList}">
-            <td th:text="${item.name}"  class="item-name"><a href="./detail.html">Razer BlackWidow Chroma Keyboard</a></td>
+            <td><a th:href="@{'/item/detail?id=' +${item.id}}"><span th:text="${item.name}"  class="item-name">Razer BlackWidow Chroma Keyboard</span></a>
             <td th:text="${item.price}" class="item-price">52.0</td>
-            <td th:text="${item.nameAll}" class="item-category"><a href="">Electronics</a> / <a href="">Computers &amp; Tablets</a> / <a href="">Components &amp; Parts</a></td>
+            <td><a th:href="@{'/item/findName?nameAll=' +${item.nameAllParent} + '/'}"><span th:text="${item.nameAllParent}">Electronics</span></a> /<a th:href="@{'/item/findName?nameAll=' +${item.nameAllParent} + '/' + ${item.nameAllChild} + '/'}"><span th:text="${item.nameAllChild}">Computers &amp; Tablets</span></a> /<a th:href="@{'/item/findName?nameAll=' +${item.nameAllParent} + '/' + ${item.nameAllChild} + '/' + ${item.nameAllGrandChild}}"><span th:text="${item.nameAllGrandChild}">Components &amp; Parts</span></a></td>
             <td th:text="${item.brand}" class="item-brand"><a href="">Razer</a></td>
             <td th:text="${item.condition}" class="item-condition">3</td>
           </tr>
