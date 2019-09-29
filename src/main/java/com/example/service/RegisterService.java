@@ -20,7 +20,7 @@ public class RegisterService {
 	 * @param register
 	 */
 	public void insert(RegisterForm form) {
-		registerRepository.insert(form.getName(), form.getPassword());
+		registerRepository.insert(form.getMailAddress(), form.getPassword());
 	}
 
 }

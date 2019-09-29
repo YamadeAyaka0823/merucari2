@@ -18,9 +18,8 @@ public class RegisterRepository {
 	private static final RowMapper<Register> REGISTER_ROW_MAPPER = (rs,i) -> {
 		Register register = new Register();
 		register.setId(rs.getInt("id"));
-		register.setName(rs.getString("name"));
+		register.setMailAddress(rs.getString("mail_address"));
 		register.setPassword(rs.getString("password"));
-		register.setAuthority(rs.getInt("authority"));
 		return register;
 	};
 	
@@ -28,9 +27,9 @@ public class RegisterRepository {
 	 * ユーザー登録のリポジトリ.
 	 * @param register
 	 */
-	public void insert(String name, String password) {
-		String sql = "INSERT INTO users(name, password, authority) VALUES(:name, :password, :authority)";
-		SqlParameterSource param = new MapSqlParameterSource().addValue("name", name).addValue("password", password);
+	public void insert(String mailAddress, String password) {
+		String sql = "INSERT INTO users(mail_address, password) VALUES(:mailAddress, :password)";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("mailAddress", mailAddress).addValue("password", password);
 		template.update(sql, param);
 	}
 
