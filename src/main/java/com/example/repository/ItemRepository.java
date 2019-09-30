@@ -108,20 +108,22 @@ public class ItemRepository {
 	 * 中カテゴリを検索するリポジトリ.
 	 * @return
 	 */
-	public List<Category> searchChild(){
-		String sql = "SELECT DISTINCT SPLIT_PART(name_all, '/', 2) FROM category WHERE name_all IS NOT NULL";
-		List<Category> parentList = template.query(sql, CATEGORY_ROW_MAPPER);
-		return parentList;
+	public List<Category> searchChild(String parentName){
+		String sql = "SELECT DISTINCT SPLIT_PART(name_all, '/', 2) FROM category WHERE name_all LIKE :nameAll";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("nameAll", parentName + '%');
+		List<Category> childList = template.query(sql, param, CATEGORY_ROW_MAPPER);
+		return childList;
 	}
 	
 	/**
 	 * 小カテゴリを検索するリポジトリ.
 	 * @return
 	 */
-	public List<Category> searchGrandChild(){
-		String sql = "SELECT DISTINCT SPLIT_PART(name_all, '/', 3) FROM category WHERE name_all IS NOT NULL";
-		List<Category> parentList = template.query(sql, CATEGORY_ROW_MAPPER);
-		return parentList;
+	public List<Category> searchGrandChild(String parentName, String childName){
+		String sql = "SELECT DISTINCT SPLIT_PART(name_all, '/', 3) FROM category WHERE name_all LIKE :parentName||:childName  ";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("parentName", parentName+"/" ).addValue("childName", childName+"/%");
+		List<Category> grandChildList = template.query(sql, param, CATEGORY_ROW_MAPPER);
+		return grandChildList;
 	}
 	
 	

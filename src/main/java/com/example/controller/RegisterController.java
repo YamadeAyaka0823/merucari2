@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.form.RegisterForm;
@@ -17,8 +18,8 @@ public class RegisterController {
 	@Autowired
 	private RegisterService registerService;
 	
-	@Autowired
-	private RegisterForm setUpForm() {
+	@ModelAttribute
+	public RegisterForm setUpForm() {
 		return new RegisterForm();
 	}
 	

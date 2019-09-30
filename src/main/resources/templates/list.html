@@ -59,12 +59,12 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
           
           <select id="pulldown1"  class="form-control">
             <option>- parentCategory -</option>
-            <option value="pulldown1_key" th:each="parent:${parentList}" th:text="${parent.nameAll}"></option>
+            <option th:each="parent:${parentList}" th:text="${parent.nameAll}" th:value="${parent.nameAll}"></option>
           </select>
         
           <select id="pulldown2" class="form-control">
             <option>- childCategory -</option>
-            <option value="pulldown2_key" th:each="child:${childList}" th:text="${child.nameAll}"></option>
+            <option value="child.nameAll" th:each="child:${childList}" th:text="${child.nameAll}" label="child.nameAll"></option>
           </select>
           <select id="pulldown3" class="form-control">
             <option>- grandChild -</option>

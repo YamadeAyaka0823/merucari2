@@ -5,7 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.domain.Category;
 import com.example.domain.Item;
@@ -24,7 +27,7 @@ public class ItemController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public String list(Integer pageNumber,Model model) {
+	public String list(Integer pageNumber,Model model, String parentName, String childName) {
 		if(pageNumber == null) {
 			pageNumber = 1;
 		}
@@ -36,10 +39,10 @@ public class ItemController {
 		List<Category> parentList = itemService.searchParent();
 		model.addAttribute("parentList", parentList);
 		
-		List<Category> childList = itemService.searchChild();
+		List<Category> childList = itemService.searchChild(parentName);
 		model.addAttribute("childList", childList);
 		
-		List<Category> grandChildList = itemService.searchGrandChild();
+		List<Category> grandChildList = itemService.searchGrandChild(parentName, childName);
 		model.addAttribute("grandChildList", grandChildList);
 		return "list";
 	}
@@ -81,34 +84,77 @@ public class ItemController {
 	 * @param nameAllChild
 	 * @return
 	 */
-	@RequestMapping("/pulldown")
-	public String changePulldown(String nameAllChild) {
-		List<Category> childList = itemService.searchChild();
-		Integer val = Integer.parseInt(nameAllChild);
-		StringBuilder child = new StringBuilder();
+	@RequestMapping(value="/pulldown/{parentName}",method=RequestMethod.GET,produces="text/plain;charset=UTF-8")
+	@ResponseBody
+	public String changePulldown(@PathVariable("parentName") String parentName) {
+		List<Category> childList = itemService.searchChild(parentName);
+		StringBuilder sb = new StringBuilder();
 		String str = "";
-		child.append("[");
+		sb.append("[");
 		
 		for(int i=0; i<childList.size(); i++) {
-		   child.append("{\"");
-		   child.append("value");
-		   child.append("\"");
-		   child.append(":");
-		   child.append("pulldown2_key");
-		   child.append(",");
-		   child.append("\"");
-		   child.append("th:text");
-		   child.append("\"");
-		   child.append(":");
-		   child.append("\"}");
-		   child.append("${child.nameAll}");
-		   child.append("\"}");
-		   child.append(",");
+			Category child = childList.get(i);
+		   sb.append("{\"");
+		   sb.append("itemValue");
+		   sb.append("\"");
+		   sb.append(":");
+		   sb.append("\"");
+		   sb.append(child.getNameAll());
+		   sb.append("\"");
+		   sb.append(",");
+		   sb.append("\"");
+		   sb.append("itemLabel");
+		   sb.append("\"");
+		   sb.append(":");
+		   sb.append("\"");
+		   sb.append(child.getNameAll());
+		   sb.append("\"}");
+		   sb.append(",");
 		}
 		
-		child.deleteCharAt(child.lastIndexOf(","));
-		child.append("]");
-		str = child.toString();
+		sb.deleteCharAt(sb.lastIndexOf(","));
+		sb.append("]");
+		str = sb.toString();
+		
+		return str;
+	}
+	
+	/**
+	 * 中カテゴリ→小カテゴリのプルダウン.
+	 * @param parentName
+	 * @return
+	 */
+	@RequestMapping(value="/pulldown2/{parentName}/{childName}",method=RequestMethod.GET,produces="text/plain;charset=UTF-8")
+	@ResponseBody
+	public String changePulldown2(@PathVariable("parentName") String parentName, @PathVariable("childName")String childName) {
+		List<Category> grandChildList = itemService.searchGrandChild(parentName, childName);
+		StringBuilder sb = new StringBuilder();
+		String str = "";
+		sb.append("[");
+		
+		for(int i=0; i<grandChildList.size(); i++) {
+			Category grandChild = grandChildList.get(i);
+		   sb.append("{\"");
+		   sb.append("itemValue");
+		   sb.append("\"");
+		   sb.append(":");
+		   sb.append("\"");
+		   sb.append(grandChild.getNameAll());
+		   sb.append("\"");
+		   sb.append(",");
+		   sb.append("\"");
+		   sb.append("itemLabel");
+		   sb.append("\"");
+		   sb.append(":");
+		   sb.append("\"");
+		   sb.append(grandChild.getNameAll());
+		   sb.append("\"}");
+		   sb.append(",");
+		}
+		
+		sb.deleteCharAt(sb.lastIndexOf(","));
+		sb.append("]");
+		str = sb.toString();
 		
 		return str;
 	}

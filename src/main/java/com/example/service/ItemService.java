@@ -70,8 +70,8 @@ public class ItemService {
 	 * 中カテゴリを検索するサービス.
 	 * @return
 	 */
-	public List<Category> searchChild(){
-		List<Category> childList = itemRepository.searchChild();
+	public List<Category> searchChild(String parentName){
+		List<Category> childList = itemRepository.searchChild(parentName);
 		return childList;
 	}
 	
@@ -79,8 +79,8 @@ public class ItemService {
 	 * 小カテゴリを検索するサービス.
 	 * @return
 	 */
-	public List<Category> searchGrandChild(){
-		List<Category> grandChildList = itemRepository.searchGrandChild();
+	public List<Category> searchGrandChild(String parentName, String childName){
+		List<Category> grandChildList = itemRepository.searchGrandChild(parentName, childName);
 		return grandChildList;
 	}
 
