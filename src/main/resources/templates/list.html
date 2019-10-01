@@ -50,23 +50,23 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
     <!-- 検索フォーム -->
     <div id="forms">
-      <form action="" class="form-inline" role="form">
+      <form th:action="@{/item/list}" class="form-inline" role="form" method="post">
         <div class="form-group">
           <input type="input" class="form-control" id="name" placeholder="item name"/>
         </div>
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
           
-          <select id="pulldown1"  class="form-control">
+          <select id="pulldown1"  class="form-control" name="nameAllParent">
             <option>- parentCategory -</option>
             <option th:each="parent:${parentList}" th:text="${parent.nameAll}" th:value="${parent.nameAll}"></option>
           </select>
         
-          <select id="pulldown2" class="form-control">
+          <select id="pulldown2" class="form-control" name="nameAllChild">
             <option>- childCategory -</option>
-            <option value="child.nameAll" th:each="child:${childList}" th:text="${child.nameAll}" label="child.nameAll"></option>
+            <option value="child.nameAll" th:each="child:${childList}" th:text="${child.nameAll}"></option>
           </select>
-          <select id="pulldown3" class="form-control">
+          <select id="pulldown3" class="form-control" name="nameAllGrandChild">
             <option>- grandChild -</option>
             <option value="pulldown3_key" th:each="grandChild:${grandChildList}" th:text="${grandChild.nameAll}"></option>
           </select>

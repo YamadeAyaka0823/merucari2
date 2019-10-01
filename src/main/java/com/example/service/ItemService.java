@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.domain.Category;
 import com.example.domain.Item;
+import com.example.form.ItemForm;
 import com.example.repository.ItemRepository;
 
 @Service
@@ -21,8 +22,8 @@ public class ItemService {
 	 * 商品全件検索のサービス.
 	 * @return
 	 */
-	public List<Item> findAll(Integer pageNumber){
-		List<Item> itemList = itemRepository.findAll(pageNumber);
+	public List<Item> findAll(Integer pageNumber, ItemForm form){
+		List<Item> itemList = itemRepository.findAll(pageNumber, form.getNameAllParent(), form.getNameAllChild(), form.getNameAllGrandChild());
 		return itemList;
 	}
 	
@@ -45,6 +46,17 @@ public class ItemService {
 		List<Item> itemNameList = itemRepository.findName(nameAll, pageNumber);
 		return itemNameList;
 	}
+	
+	/**
+	 * 検索ボタンを押して検索するサービス.
+	 * @param form
+	 * @param pageNumber
+	 * @return
+	 */
+//	public List<Item> searchItem(ItemForm form, Integer pageNumber){
+//		List<Item> searchItemList = itemRepository.searchItem(form.getNameAllParent(), form.getNameAllChild(), form.getNameAllGrandChild(), pageNumber);
+//		return searchItemList;
+//	}
 	
 	/**
 	 * ブランドごとに検索するサービス.

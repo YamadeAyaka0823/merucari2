@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.domain.Category;
 import com.example.domain.Item;
+import com.example.form.ItemForm;
 import com.example.service.ItemService;
 
 @Controller
@@ -27,12 +28,12 @@ public class ItemController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public String list(Integer pageNumber,Model model, String parentName, String childName) {
+	public String list(Integer pageNumber,Model model, ItemForm form, String parentName, String childName) {
 		if(pageNumber == null) {
 			pageNumber = 1;
 		}
 		
-		List<Item> itemList = itemService.findAll(pageNumber);
+		List<Item> itemList = itemService.findAll(pageNumber, form);
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("pageNumber", pageNumber);
 		
@@ -78,6 +79,28 @@ public class ItemController {
 		model.addAttribute("itemList", itemBrandList);
 		return "list";
 	}
+	
+	/**
+	 * 検索ボタンを使って検索する.
+	 * @param nameAllParent
+	 * @param nameAllChild
+	 * @param nameAllGrandChild
+	 * @param pageNumber
+	 * @param model
+	 * @param nameAll
+	 * @return
+	 */
+//	@RequestMapping("/searchItem")
+//	public String searchItem(ItemForm form, Integer pageNumber, Model model, String nameAll) {
+//		System.out.println(form);
+//		if(pageNumber == null) {
+//			pageNumber = 1;
+//		}
+//		model.addAttribute("pageNumber", pageNumber);
+//		List<Item> searchItemList = itemService.searchItem(form, pageNumber);
+//		model.addAttribute("itemList", searchItemList);
+//		return "list";
+//	}
 	
 	/**
 	 * 大カテゴリ→中カテゴリのプルダウン.

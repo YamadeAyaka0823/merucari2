@@ -8,39 +8,53 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.form.RegisterForm;
-import com.example.service.RegisterService;
+import com.example.domain.Login;
+import com.example.form.LoginForm;
+import com.example.service.LoginService;
+
 
 @Controller
-@RequestMapping("/register")
-public class RegisterController {
+@RequestMapping("/login")
+public class LoginController {
 	
 	@Autowired
-	private RegisterService registerService;
+	private LoginService loginService;
+	
+
 	
 	@ModelAttribute
-	public RegisterForm setUpForm() {
-		return new RegisterForm();
-	}
-	
-	@RequestMapping("")
-	public String index() {
-		return "register";
+	public LoginForm setUpForm() {
+		return new LoginForm();
 	}
 	
 	/**
-	 * ユーザー登録.
+	 * ログイン画面.
+	 * @return
+	 */
+	@RequestMapping("")
+	public String index() {
+		return "login";
+	}
+	
+	/**
+	 * ログイン成功したら商品一覧へ.
 	 * @param form
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("/insert")
-	public String insert(@Validated RegisterForm form, BindingResult result, Model model) {
+	@RequestMapping("/login")
+	public String login(@Validated LoginForm form, BindingResult result, Model model) {
+		
 		if(result.hasErrors()) {
 			return index();
 		}
-		registerService.insert(form);
-		return "forward:/login";
+		
+
+			Login login = loginService.load(form);
+			model.addAttribute("login", login);
+			return "forward:/item/list";
+
+
 	}
 
 }

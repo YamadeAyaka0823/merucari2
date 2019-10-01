@@ -28,7 +28,7 @@ public class ItemRepository {
 		item.setCategory(rs.getInt("i_category"));
 		item.setCondition(rs.getInt("i_condition"));
 		item.setDescription(rs.getString("i_description"));
-		item.setNameAllParent(rs.getString("parent"));
+		item.setNameAllParent(rs.getString("parent2"));
 		item.setNameAllChild(rs.getString("child"));
 		item.setNameAllGrandChild(rs.getString("grandchild"));
 		return item;
@@ -48,11 +48,21 @@ public class ItemRepository {
 	 * 商品全件検索のリポジトリ.
 	 * @return
 	 */
-	public List<Item> findAll(Integer pageNumber){
+	public List<Item> findAll(Integer pageNumber, String nameAllParent, String nameAllChild, String nameAllGrandChild){
 		int offset = (pageNumber - 1) * 30;
-		String sql = "SELECT i.id i_id, i.name i_name, i.price i_price, i.shipping i_shipping, i.brand i_brand, i.category i_category, i.condition i_condition, i.description i_description, SPLIT_PART(c.name_all, '/', 1) AS parent ,SPLIT_PART(c.name_all, '/', 2) AS child , SPLIT_PART(c.name_all, '/', 3) AS grandchild  FROM items i LEFT OUTER JOIN category c ON i.category = c.id  ORDER BY i.id LIMIT 30 OFFSET " + offset;
-		List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
-		return itemList;
+		if(nameAllParent == null && nameAllChild == null && nameAllGrandChild == null) {
+			String sql = "SELECT i.id i_id, i.name i_name, i.price i_price, i.shipping i_shipping, i.brand i_brand, i.category i_category, i.condition i_condition, i.description i_description, SPLIT_PART(c.name_all, '/', 1) AS parent2 ,SPLIT_PART(c.name_all, '/', 2) AS child , SPLIT_PART(c.name_all, '/', 3) AS grandchild  FROM items i LEFT OUTER JOIN category c ON i.category = c.id  ORDER BY i.id LIMIT 30 OFFSET " + offset;
+			List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
+			return itemList;
+		}else {
+			String sql = " SELECT i.id i_id, i.name i_name, i.price i_price, i.shipping i_shipping, i.brand i_brand, i.category i_category, i.condition i_condition, i.description i_description, SPLIT_PART(c.name_all, '/', 1) AS parent2 ,SPLIT_PART(c.name_all, '/', 2) AS child , SPLIT_PART(c.name_all, '/', 3) AS grandchild  FROM items i LEFT OUTER JOIN category c ON i.category = c.id ";
+			       sql += " WHERE  SPLIT_PART(c.name_all, '/', 1) = :parent AND SPLIT_PART(c.name_all, '/', 2) = :child AND SPLIT_PART(c.name_all, '/', 3) = :grandChild ";
+			       sql += " ORDER BY i.id LIMIT 30 OFFSET " + offset;
+			       SqlParameterSource param = new MapSqlParameterSource().addValue("parent", nameAllParent).addValue("child", nameAllChild).addValue("grandChild", nameAllGrandChild);
+			       List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
+			 return itemList;      
+		}
+		
 	}
 	
 	/**
@@ -79,6 +89,22 @@ public class ItemRepository {
 		List<Item> itemNameList = template.query(sql, param, ITEM_ROW_MAPPER);
 		return itemNameList;
 	}
+	
+	/**
+	 * 検索ボタンを押して検索するリポジトリ.
+	 * @param nameAllParent
+	 * @param nameAllChild
+	 * @param nameAllGrandChild
+	 * @param pageNumber
+	 * @return
+	 */
+//	public List<Item> searchItem(String nameAllParent, String nameAllChild, String nameAllGrandChild, Integer pageNumber){
+//		int offset = (pageNumber - 1) * 30;
+//		String sql = "SELECT i.id i_id, i.name i_name, i.price i_price, i.shipping i_shipping, i.brand i_brand, i.category i_category, i.condition i_condition, i.description i_description, SPLIT_PART(c.name_all, '/', 1) AS parent ,SPLIT_PART(c.name_all, '/', 2) AS child , SPLIT_PART(c.name_all, '/', 3) AS grandchild FROM items i LEFT OUTER JOIN category c ON i.category = c.id WHERE parent = :parent AND child = :child AND grandChild = :grandChild ORDER BY i.id LIMIT 30 OFFSET " + offset;
+//		SqlParameterSource param = new MapSqlParameterSource().addValue("parent", nameAllParent).addValue("child", nameAllChild).addValue("grandChild", nameAllGrandChild);
+//		List<Item> searchItemList = template.query(sql, param, ITEM_ROW_MAPPER);
+//		return searchItemList;
+//	}
 	
 	/**
 	 * ブランドごとに検索するリポジトリ.
